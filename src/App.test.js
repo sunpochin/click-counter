@@ -23,10 +23,18 @@ test('renders without errors', () => {
 
 
 test('renders increment button', () => {
+  const wrapper = shallow(<App />);
+  const appComponent = wrapper.find("[data-test='increment-button']");
+  console.log('appComponent: ', appComponent )
+  expect(appComponent.length).toBe(1)
 });
 
 
 test('renders counter display', () => {
+  const wrapper = shallow(<App />);
+  const appComponent = wrapper.find("[data-test='counter-display']");
+  console.log('appComponent: ', appComponent )
+  expect(appComponent.length).toBe(1)
 });
 
 
