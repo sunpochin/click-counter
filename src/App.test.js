@@ -16,7 +16,11 @@ import App from './App';
  */
 
 const setup = (props={}, state=null) => {
-  return shallow(<App {...props} />);
+  const wrapper = shallow(<App {...props} />);
+  if (state) {
+    wrapper.setState(state);
+  }
+  return wrapper;
 }
 
 const findByTestAttr = (wrapper, val) => {
@@ -33,7 +37,7 @@ test('renders without errors', () => {
 
 test('renders without errors', () => {
   const wrapper = setup();
-  const appComponent = findByTestAttr(wrapper,'component-app');
+  const appComponent = findByTestAttr(wrapper, 'component-app');
   console.log('appComponent: ', appComponent )
   expect(appComponent.length).toBe(1)
 });
@@ -41,7 +45,7 @@ test('renders without errors', () => {
 
 test('renders increment button', () => {
   const wrapper = setup();
-  const appComponent = findByTestAttr(wrapper,'increment-button');
+  const appComponent = findByTestAttr(wrapper, 'increment-button');
   console.log('appComponent: ', appComponent )
   expect(appComponent.length).toBe(1)
 });
@@ -49,16 +53,31 @@ test('renders increment button', () => {
 
 test('renders counter display', () => {
   const wrapper = setup();
-  const appComponent = findByTestAttr(wrapper,'counter-display');
+  const appComponent = findByTestAttr(wrapper, 'counter-display');
   console.log('appComponent: ', appComponent )
   expect(appComponent.length).toBe(1)
 });
 
 
 test('renders counter starts at 0', () => {
+  const wrapper = setup();
+  const initialCounterState = wrapper.state('counter');
+  expect(initialCounterState).toBe(0)
 });
 
 // moving away from "testing implementation"
 test('clicking button increment counter ***display***', () => {
+  const counter = 7;
+  const wrapper = setup(null, {counter});
+
+  // find button and click.
+  const button = findByTestAttr(wrapper,'increment-button');
+  button.simulate('click');
+
+  // find display and test value.
+  const counterDisplay = findByTestAttr(wrapper, 'counter-display');
+  expect(counterDisplay.text()).toContain( counter + 1) ;
+
+
 });
 
